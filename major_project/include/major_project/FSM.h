@@ -1,19 +1,19 @@
 #ifndef FSM_H
 #define FSM_H
 
-// ----- macros ----- 
-#define DEBUG
+
 
 // ----- includes ----- 
 #include "ros/ros.h"
 #include "odom.h"
-#include "cmdvel.h"
-//#include "laser.h" // not implemented yet
-//#include "SLAM.h"  // not implemented yet
+#include "test.h"
 
+// ----- macros ----- 
+#define DEBUG
 
 // ----- foward declarations ----- 
 class COdom;
+class CTEST;
 //class CSLAM;      // ONLY FOR EXAMPLE AT THE MOMENT
 
 /**
@@ -33,7 +33,6 @@ class CFSM
     {
       INIT,
       STATE1,
-      STATE2,
       END
     };
 
@@ -41,8 +40,7 @@ class CFSM
     bool nextStateLogic();
 
     // ---- your class here ----
-    // EXAMPLE !!
-    // CSLAM test;
+    CTEST tester;
 
     // ---- subscriber topic interfaces ----
     COdom odomInterface(ros::NodeHandle *nh_);
