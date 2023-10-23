@@ -2,8 +2,8 @@
 #define TEST_H
 
 #include "cmdvel.h"
-//#include "laser.h"
 #include "odom.h"
+#include <iostream>
 
 /*
  * Test class used to test new topic/subscriber structure
@@ -11,15 +11,16 @@
 class CTEST
 {
   public:
+    CTEST(ros::NodeHandle *nh_);
+    ~CTEST();
+
+    // Tests odom subscribing
+    void test1(double Yaw);
     // Tests cmd velocity publishing
-    void test1();
-    // Tests laser and odom subscribing
     void test2();
   private:
-    // Nodehandle pointer
-    ros::NodeHandle *nh_;
     // Example
-    COdom odomInterface();
+    CCmdVel cmdvelInterface;
 
 
 };

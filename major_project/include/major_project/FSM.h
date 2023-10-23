@@ -1,8 +1,6 @@
 #ifndef FSM_H
 #define FSM_H
 
-
-
 // ----- includes ----- 
 #include "ros/ros.h"
 #include "odom.h"
@@ -43,7 +41,7 @@ class CFSM
     CTEST tester;
 
     // ---- subscriber topic interfaces ----
-    COdom odomInterface(ros::NodeHandle *nh_);
+    COdom odomInterface{*nh_};
 
   private:
     // ---- state history ----

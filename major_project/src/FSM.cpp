@@ -9,12 +9,16 @@ bool CFSM::nextStateLogic()
     {
       // Fill in
       // EXAMPLE!!!
-      
+
       // test.handler(odomInterface.getYaw(), ... )
+      tester.test1(odomInterface.getYaw());
     }
     case States::STATE1:
     {
+      tester.test2();
       // Fill in
+      ROS_INFO("State [%d]", int(currentState));
+      break;
     }
     case States::END:
     {

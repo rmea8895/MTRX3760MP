@@ -5,7 +5,7 @@ For unexplored navigation
 1) Breadth first search to find unexplored points 
 within the (cost map with boundaries around obstacles so that the points are actually reachable) map (boarding the field of unexplored points). (if no points exist, the map exploration is complete)
 
-2) Using the list of unexpored points run a A* cost algorithm to find the closest point by path. 
+2) Using the list of unexpored points run a A* cost algorithm to find the closest point by path.  (or use euclid distance, bcus easier)
 
 3) Navigate to unexpored point using the 2D nav goal.
 
