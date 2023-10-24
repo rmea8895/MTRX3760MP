@@ -1,4 +1,6 @@
 #include "../include/major_project/unexplored_nav.h"
+#include "../include/major_project/maps.h"
+
 #include <limits>
 #include <utility>
 #include <queue>
@@ -49,7 +51,7 @@ bool CUnexploredNav::isValid(int row, int col) {
 }
 
 // Need a function to perform the BFS algorithm
-void CUnexploredNav::BFS(int grid[][COL], int costmap[][COL], int row, int col)
+void CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int row, int col)
 {
     /*
      * Inputs:
@@ -57,6 +59,9 @@ void CUnexploredNav::BFS(int grid[][COL], int costmap[][COL], int row, int col)
      *  - costmap: costmap indicating near collisions
      *  - vis
      */
+
+    auto grid = gridPtr->map;
+    auto costmap = costmapPtr->costMap;
 
     // Stores indices of the matrix cells
     std::queue<std::pair<int, int>> q;
@@ -72,7 +77,7 @@ void CUnexploredNav::BFS(int grid[][COL], int costmap[][COL], int row, int col)
         int x = cell.first;
         int y = cell.second;
  
-        std::cout << grid[x][y] << " ";
+        //std::cout << grid[x][y] << " ";
  
         q.pop();
  
@@ -139,9 +144,9 @@ std::pair<int, int> CUnexploredNav::closestPoint() {
 
 
 // Handler to run the functions (like a main)
-std::pair<int, int> CUnexploredNav::handler() {
+std::pair<int, int> CUnexploredNav::handler(int row, int col) {
     // Run BFS to obtain unexplored boundary points
-    BFS();
+    BFS(maps.getMapPtr(), maps.getCostMapPtr(), row, col);
 
     // Run calculateDistance to find the closest of those boundary points
     std::pair<int, int> minCoords;
