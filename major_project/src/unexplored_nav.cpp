@@ -1,7 +1,9 @@
 #include "../include/major_project/unexplored_nav.h"
+#include <limits>
 #include <utility>
 #include <queue>
 #include <iostream>
+#include <cmath>
 
 
 /*
@@ -22,14 +24,11 @@ Smart pointer data
 
 */
 
-// Constructor
-CUnexploredNav::CUnexploredNav() {
-    //
-}
+
 
 
 // Need a function to check if a cell has been visited already
-bool CUnexploredNav::isValid(bool vis[][COL], int row, int col) {
+bool CUnexploredNav::isValid(int row, int col) {
     bool check;
 
     // If cell lies out of bounds
@@ -37,7 +36,7 @@ bool CUnexploredNav::isValid(bool vis[][COL], int row, int col) {
         check = false;
     }
     // If cell is already visited
-    else if (vis[row][col]) {
+    else if (visited[row][col]) {
         check = false;
     }
     // Otherwise true
@@ -50,8 +49,15 @@ bool CUnexploredNav::isValid(bool vis[][COL], int row, int col) {
 }
 
 // Need a function to perform the BFS algorithm
-void CUnexploredNav::BFS(int grid[][COL], int costmap[][COL], bool vis[][COL], int row, int col)
+void CUnexploredNav::BFS(int grid[][COL], int costmap[][COL], int row, int col)
 {
+    /*
+     * Inputs:
+     *  - grid: global gray map
+     *  - costmap: costmap indicating near collisions
+     *  - vis
+     */
+
     // Stores indices of the matrix cells
     std::queue<std::pair<int, int>> q;
  
@@ -78,9 +84,9 @@ void CUnexploredNav::BFS(int grid[][COL], int costmap[][COL], bool vis[][COL], i
             int adjy = y + dCol[i];
 
             // If the adjacent pixel is not visited before
-            if (isValid(visited, adjx, adjy)) {
+            if (isValid(adjx, adjy)) {
                 q.push({ adjx, adjy });
-                vis[adjx][adjy] = true;
+                visited[adjx][adjy] = true;
 
                 // Logic for if pixels are on the boundary of unexplored regions
                 // If adjacent pixel is unexplored and is far away enough from
@@ -88,11 +94,59 @@ void CUnexploredNav::BFS(int grid[][COL], int costmap[][COL], bool vis[][COL], i
                 if (grid[adjx][adjy] == PLACEHOLDER && costmap[adjx][adjy] < PLACEHOLDER && isBoundary == false) {
                     // Add pixel by pushing back onto the vector
                     boundaryPixels.push_back(std::make_pair(x, y));
+                    // boundaryPixels[std::make_pair(x, y)] = calculateMagnitude(x, y, row, col);
 
                     // Check if at least one adjacent pixel is unxeplored
                     isBoundary = true;
+
+                    break;
                 }
             }
         }
     }
+}
+
+// Function to compute euclidian distance
+double CUnexploredNav::calculateDistance(int x, int y, int row, int col) {
+    // Compute dx and dy
+    int dx = row - x;
+    int dy = col - y;
+    // Use double arithmetic for the calculation
+    return std::sqrt(static_cast<double>(dx * dx) + static_cast<double>(dy * dy));
+}
+
+
+// Need a function to find closest unexplored point
+// (minimum of euclidian distance)
+std::pair<int, int> CUnexploredNav::closestPoint() {
+    // Get a really high value to begin with
+    double minDistance = std::numeric_limits<double>::max();
+    std::pair<int, int> minCoords;
+
+    for (int i = 0; i < boundaryPixels.size(); i++) {
+        int x = boundaryPixels.at(i).first;
+        int y = boundaryPixels.at(i).second;
+        double distance = calculateDistance(x, y, row, col);
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            minCoords = boundaryPixels.at(i);
+        }
+    }
+
+    return minCoords;
+}
+
+
+// Handler to run the functions (like a main)
+std::pair<int, int> CUnexploredNav::handler() {
+    // Run BFS to obtain unexplored boundary points
+    BFS();
+
+    // Run calculateDistance to find the closest of those boundary points
+    std::pair<int, int> minCoords;
+    minCoords = closestPoint();
+
+
+    return minCoords;
 }
