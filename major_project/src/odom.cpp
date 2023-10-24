@@ -1,14 +1,14 @@
 #include "../include/major_project/odom.h"
 
-COdom::COdom(ros::NodeHandle *nh_)
+COdom::COdom(ros::NodeHandlePtr nh_)
 {
   ROS_INFO("Odom Init");
-  bool ret = init(ros::NodeHandle *nh_);
+  bool ret = init(nh_);
   // check initialization
   ROS_ASSERT(ret);
 }
 
-bool COdom::init(ros::NodeHandle *nh_)
+bool COdom::init(ros::NodeHandlePtr nh_)
 {
   odom_sub_ = nh_->subscribe("odom", 10, &COdom::callBack, this);
   return true;
@@ -31,4 +31,8 @@ void COdom::callBack(const nav_msgs::Odometry::ConstPtr &msg)
 double COdom::getYaw()
 {
   return mYaw;
+}
+
+COdom::~COdom()
+{ 
 }

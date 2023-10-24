@@ -5,6 +5,7 @@
 #include "ros/ros.h"
 #include "odom.h"
 #include "test.h"
+#include <memory.h>
 
 // ----- macros ----- 
 #define DEBUG
@@ -12,6 +13,7 @@
 // ----- foward declarations ----- 
 class COdom;
 class CTEST;
+
 //class CSLAM;      // ONLY FOR EXAMPLE AT THE MOMENT
 
 /**
@@ -24,7 +26,7 @@ class CFSM
     ~CFSM();
 
     /// ROS node handle
-    ros::NodeHandle nh_;
+    ros::NodeHandlePtr nh_ = ros::NodeHandlePtr(new ros::NodeHandle());
 
     /// states enum 
     enum class States : int
@@ -38,14 +40,14 @@ class CFSM
     bool nextStateLogic();
 
     // ---- your class here ----
-    CTEST tester;
+    CTEST tester{nh_};
 
     // ---- subscriber topic interfaces ----
-    COdom odomInterface{*nh_};
+    COdom odomInterface{nh_};
 
   private:
     // ---- state history ----
-    States currentState = States::INIT;
+    States currentState = States::STATE1;
     States prevState = States::INIT;
     States nextState;
 };

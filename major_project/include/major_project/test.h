@@ -2,6 +2,8 @@
 #define TEST_H
 
 #include "cmdvel.h"
+#include "ros/ros.h"
+#include <memory.h>
 #include "odom.h"
 #include <iostream>
 
@@ -11,7 +13,7 @@
 class CTEST
 {
   public:
-    CTEST(ros::NodeHandle *nh_);
+    CTEST(ros::NodeHandlePtr nh_);
     ~CTEST();
 
     // Tests odom subscribing
