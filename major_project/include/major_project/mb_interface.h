@@ -4,7 +4,7 @@
 #include <ros/ros.h>
 #include "states.h"
 #include <iostream>
-#include <actionlib_msgs/GoalID> // for canceling the goal
+#include <actionlib_msgs/GoalID.h> // for canceling the goal
 #include <geometry_msgs/PoseStamped.h>
 
 /**

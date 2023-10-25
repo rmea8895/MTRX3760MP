@@ -17,18 +17,22 @@ bool CMaps::init(ros::NodeHandlePtr nh_)
 
 void CMaps::mapCallBack(const nav_msgs::OccupancyGrid::ConstPtr& msg)
 {
+  std::cout << "Map Callback" << std::endl;
   // cell size is default 0.05m/cell or 5cm per cell resolution
   // probably want 2cm per cell res, can modify this in the yaml config
   unsigned int width = msg->info.width;
   unsigned int height = msg->info.height;
 
-  for(int i = 0; i < width; i++)
-  {
-    for(int j = 0; j < height; j++)
-    {
-      map[i][j] = msg->data[i+j*width];
-    }
-  }
+  std::cout << msg->data[0] << std::endl;
+  // for(int i = 0; i < width; i++)
+  // {
+  //   for(int j = 0; j < height; j++)
+  //   {
+  //     std::cout << i << ", " << j << std::endl;
+  //     map[i][j] = msg->data[i+j*width];
+  //   }
+  // }
+  std::cout << "Map Callback end" << std::endl;
   #ifdef MAP_DEBUG
     ROS_INFO("State [%d]", msg);
   #endif
@@ -48,15 +52,15 @@ void CMaps::costMapCallBack(const nav_msgs::OccupancyGrid::ConstPtr& msg)
   }
 }
 
-auto CMaps::getMapPtr()
+std::vector<std::vector<signed char>>* CMaps::getMapPtr()
 {
-  auto mapPtr = &map;
+  std::vector<std::vector<signed char>>* mapPtr = &map;
   return mapPtr;
 }
 
-auto CMaps::getCostMapPtr()
+std::vector<std::vector<signed char>>* CMaps::getCostMapPtr()
 {
-  auto costMapPtr = &costMap;
+  std::vector<std::vector<signed char>>* costMapPtr = &costMap;
   return costMapPtr;
 }
 

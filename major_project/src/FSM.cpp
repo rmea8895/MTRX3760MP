@@ -36,10 +36,14 @@ bool CFSM::nextStateLogic()
       //   mbI.cancelGoal();
       //   nextState = States::STATE1;
       // }
-
-
-      tester.test1();
       nextState = States::INIT;
+      int counter = 0;
+      counter ++;
+      if (counter > 100)
+      {
+        tester.test1();
+        nextState = States::INIT;
+      }
       
       // counter++;
       // if (counter > 100)

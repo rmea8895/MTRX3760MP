@@ -5,6 +5,7 @@
 #include <nav_msgs/OccupancyGrid.h> 
 #include <utility>
 #include <vector>
+#include <iostream>
 
 //#define MAP_DEBUG
 
@@ -21,9 +22,9 @@ class CMaps
     ~CMaps();
 
     // Returns pointer to map
-    auto getMapPtr();
+    std::vector<std::vector<signed char>>* getMapPtr();
     // Returns pointer to cost map
-    auto getCostMapPtr();
+    std::vector<std::vector<signed char>>* getCostMapPtr();
     /// 2d Vector
     std::vector<std::vector<signed char>> map;
     std::vector<std::vector<signed char>> costMap;
