@@ -19,12 +19,12 @@ class CUnexploredNav
 {
   public:
     // Handler runs the BFS and calculateDistance to find closest point
-    std::pair<int, int> handler(int row, int col);
+    std::pair<int, int> handler(int xGrid, int yGrid);
 
   private:
     // -- Function declarations ------------------------------------------------
-    bool isValid(int row, int col);
-    bool BFS(auto gridPtr, auto costmapPtr, int row, int col);  // Will need to change function input data types
+    bool isValid(int xGrid, int yGrid);
+    bool BFS(auto gridPtr, auto costmapPtr, int xGrid, int yGrid);  // Will need to change function input data types
     double calculateDistance(int x, int y, int row, int col);
     std::pair<int, int> closestPoint();
     std::pair<double, double> grid2Cartesian(std::pair<int, int> gridCoords);

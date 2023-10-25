@@ -24,9 +24,15 @@ bool CFSM::nextStateLogic()
       nextState = States::INIT;
       
       counter++;
-      if (counter > 100)
+      if (counter == 100)
       {
-        move_baseCI.sendGoal();
+        mbI.sendGoal();
+        nextState = States::INIT;
+      }
+
+      if (counter > 300)
+      {
+        mbI.cancelGoal();
         nextState = States::STATE1;
       }
       // counter++;

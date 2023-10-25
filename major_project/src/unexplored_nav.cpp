@@ -23,15 +23,15 @@
 
 
 // Need a function to check if a cell has been visited already
-bool CUnexploredNav::isValid(int row, int col) {
+bool CUnexploredNav::isValid(int xGrid, int yGrid) {
     bool check;
 
     // If cell lies out of bounds
-    if (row < 0 || col < 0 || row >= ROW || col >= COL) {
+    if (xGrid < 0 || yGrid < 0 || xGrid >= ROW || yGrid >= COL) {
         check = false;
     }
     // If cell is already visited
-    else if (visited[row][col]) {
+    else if (visited[xGrid][yGrid]) {
         check = false;
     }
     // Otherwise true
@@ -44,7 +44,7 @@ bool CUnexploredNav::isValid(int row, int col) {
 }
 
 // Need a function to perform the BFS algorithm
-bool CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int row, int col)
+bool CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int xGrid, int yGrid)
 {
     /*
      * Inputs:
@@ -69,8 +69,8 @@ bool CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int row, int col)
     std::queue<std::pair<int, int>> q;
  
     // Mark the starting cell as visited and push it into the queue
-    q.push({ row, col });
-    visited[row][col] = true;
+    q.push({ xGrid, yGrid });
+    visited[xGrid][yGrid] = true;
  
     // Iterate while the queue is not empty
     while (!q.empty()) {
@@ -118,14 +118,13 @@ bool CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int row, int col)
 }
 
 // Function to compute euclidian distance
-double CUnexploredNav::calculateDistance(int x, int y, int row, int col) {
+double CUnexploredNav::calculateDistance(int x, int y, int xGrid, int yGrid) {
     // Compute dx and dy
-    int dx = row - x;
-    int dy = col - y;
+    int dx = xGrid - x;
+    int dy = yGrid - y;
     // Use double arithmetic for the calculation
     return std::sqrt(static_cast<double>(dx * dx) + static_cast<double>(dy * dy));
 }
-
 
 // Need a function to find closest unexplored point
 // (minimum of euclidian distance)
@@ -137,7 +136,7 @@ std::pair<int, int> CUnexploredNav::closestPoint() {
     for (int i = 0; i < boundaryPixels.size(); i++) {
         int x = boundaryPixels.at(i).first;
         int y = boundaryPixels.at(i).second;
-        double distance = calculateDistance(x, y, row, col);
+        double distance = calculateDistance(x, y, xGrid, yGrid);
 
         if (distance < minDistance) {
             minDistance = distance;
@@ -170,11 +169,11 @@ std::pair<int, int> CUnexploredNav::cartesian2Grid(std::pair<double, double> car
 
 
 // Handler to run the functions (like a main)
-std::pair<int, int> CUnexploredNav::handler(int row, int col) {
+std::pair<int, int> CUnexploredNav::handler(int xGrid, int yGrid) {
     // row and col are the x and y position of the robot in the grid
 
     // Run BFS to obtain unexplored boundary points
-    BFS(maps.getMapPtr(), maps.getCostMapPtr(), row, col);
+    BFS(maps.getMapPtr(), maps.getCostMapPtr(), xGrid, yGrid);
 
     // Run calculateDistance to find the closest of those boundary points
     std::pair<int, int> minCoords;
