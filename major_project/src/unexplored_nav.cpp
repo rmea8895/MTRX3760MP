@@ -17,16 +17,9 @@
 */
 
 // Define constants
-// Direction arrays are used to traverse the adjacent cells
-const int dRow[] = {-1, 0, 1, 0};
-const int dCol[] = {0, 1, 0, -1};
-
-/*
-Smart pointer data
-
-*/
 
 
+// THIS NEEDS REFACTORING TO MANAGE ROW, COL, visited
 
 
 // Need a function to check if a cell has been visited already
@@ -51,17 +44,26 @@ bool CUnexploredNav::isValid(int row, int col) {
 }
 
 // Need a function to perform the BFS algorithm
-void CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int row, int col)
+bool CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int row, int col)
 {
     /*
      * Inputs:
      *  - grid: global gray map
      *  - costmap: costmap indicating near collisions
      *  - vis
+     * Outputs:
+     *  - noUnexploredBoundaries: bool (false if )
      */
 
     auto grid = gridPtr->map;
     auto costmap = costmapPtr->costMap;
+
+    // For now, assume grid and costmap have same size
+    int ROW = grid.size();
+    int COL = grid[0].size();
+
+    // Determine whether there are no more regions to explore
+    bool noUnexploredBoundaries = false;
 
     // Stores indices of the matrix cells
     std::queue<std::pair<int, int>> q;
@@ -106,6 +108,10 @@ void CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int row, int col)
 
                     break;
                 }
+                else {
+                    // There are no more unexplored borders
+                    noUnexploredBoundaries = true;
+                }
             }
         }
     }
@@ -142,16 +148,37 @@ std::pair<int, int> CUnexploredNav::closestPoint() {
     return minCoords;
 }
 
+std::pair<double, double> CUnexploredNav::grid2Cartesian(std::pair<int, int> gridCoords) {
+    int xGrid = gridCoords.first;
+    int yGrid = gridCoords.second;
+
+    double xCart = (xGrid - ROW/2) * resolution;
+    double yCart = (COL/2 - yGrid) * resolution;
+
+    return std::pair<double, double>(xCart, yCart);
+}
+
+std::pair<int, int> CUnexploredNav::cartesian2Grid(std::pair<double, double> cartCoords) {
+    double xCart = cartCoords.first;
+    double yCart = cartCoords.second;
+
+    int xGrid = (xCart/resolution) + ROW/2;
+    int yGrid = COL/2 - (yCart/resolution);
+
+    return std::pair<int, int>(xGrid, yGrid);
+}
+
 
 // Handler to run the functions (like a main)
 std::pair<int, int> CUnexploredNav::handler(int row, int col) {
+    // row and col are the x and y position of the robot in the grid
+
     // Run BFS to obtain unexplored boundary points
     BFS(maps.getMapPtr(), maps.getCostMapPtr(), row, col);
 
     // Run calculateDistance to find the closest of those boundary points
     std::pair<int, int> minCoords;
-    minCoords = closestPoint();
-
-
+    minCoords = grid2Cartesian(closestPoint());
+    
     return minCoords;
 }

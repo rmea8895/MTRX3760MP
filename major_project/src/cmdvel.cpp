@@ -10,7 +10,7 @@ CCmdVel::CCmdVel(ros::NodeHandlePtr nh_)
 
 bool CCmdVel::init(ros::NodeHandlePtr nh_)
 {
-  cmd_vel_pub_  = nh_->advertise<geometry_msgs::Twist>( "/cmd_vel", 10 );  return true;
+  cmd_vel_pub_  = nh_->advertise<geometry_msgs::Twist>( "/cmd_vel", 10 );
   return true;
 }
 

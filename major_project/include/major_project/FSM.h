@@ -5,6 +5,8 @@
 #include "ros/ros.h"
 #include "odom.h"
 #include "test.h"
+#include "states.h"
+#include "move_base_client.h"
 #include <memory.h>
 
 // ----- macros ----- 
@@ -13,7 +15,7 @@
 // ----- foward declarations ----- 
 class COdom;
 class CTEST;
-
+class Cmove_baseCI;
 //class CSLAM;      // ONLY FOR EXAMPLE AT THE MOMENT
 
 /**
@@ -25,16 +27,8 @@ class CFSM
     CFSM();
     ~CFSM();
 
-    /// ROS node handle
+    /// ROS node handle pointer
     ros::NodeHandlePtr nh_ = ros::NodeHandlePtr(new ros::NodeHandle());
-
-    /// states enum 
-    enum class States : int
-    {
-      INIT,
-      STATE1,
-      END
-    };
 
     /// Next state logic function
     bool nextStateLogic();
@@ -45,9 +39,12 @@ class CFSM
     // ---- subscriber topic interfaces ----
     COdom odomInterface{nh_};
 
+    // ---- move_base_client ----
+    Cmove_baseCI move_baseCI{nh_};
+
   private:
     // ---- state history ----
-    States currentState = States::STATE1;
+    States currentState = States::INIT;
     States prevState = States::INIT;
     States nextState;
 };
