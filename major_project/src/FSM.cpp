@@ -13,6 +13,7 @@ CFSM::CFSM()
 
 bool CFSM::nextStateLogic()
 {
+  static int counter = 0;
   // ------ Next state logic ------ 
   switch(currentState)
   {
@@ -20,14 +21,30 @@ bool CFSM::nextStateLogic()
     {
       // Fill in
       // EXAMPLE!!!
-
+      nextState = States::INIT;
+      
+      counter++;
+      if (counter > 100)
+      {
+        move_baseCI.sendGoal();
+        nextState = States::STATE1;
+      }
+      // counter++;
+      // if (counter > 100)
+      // {
+      //   nextState = move_baseCI.moveXY(
+      //     std::pair<int, int>(1,0.5),
+      //     States::INIT,
+      //     States::STATE1,
+      //     States::ERROR);
+      // }
       // test.handler(odomInterface.getYaw(), ... )
-      tester.test1(odomInterface.getYaw());
+      // tester.test1(odomInterface.getYaw());
       break;
     }
     case States::STATE1:
     {
-      tester.test2();
+      // tester.test2();
       // Fill in
       ROS_INFO("State [%d]", int(currentState));
       nextState = States::STATE1;
@@ -38,9 +55,16 @@ bool CFSM::nextStateLogic()
       ROS_INFO("State [%d]", int(currentState));
       break;
     }
+    case States::ERROR:
+    {
+      ROS_INFO("Error! undefined behaviour");
+      break;
+    }
     default:
-      nextState = States::INIT;
-    break;
+    {
+      nextState = States::ERROR;
+      break;
+    }
   }
 
   // update current State

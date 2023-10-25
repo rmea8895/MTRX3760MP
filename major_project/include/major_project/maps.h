@@ -20,12 +20,11 @@ class CMaps
     CMaps(ros::NodeHandlePtr nh_);
     ~CMaps();
 
-
     // Returns pointer to map
     auto getMapPtr();
     // Returns pointer to cost map
     auto getCostMapPtr();
-    /// Signed char => 8 bits
+    /// 2d Vector
     std::vector<std::vector<signed char>> map;
     std::vector<std::vector<signed char>> costMap;
 
