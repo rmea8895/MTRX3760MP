@@ -44,7 +44,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME}_node src/main.cpp src/FSM.cpp src/cmdvel.cpp src/odom.cpp src/test.cpp src/maps.cpp src/mb_interface.cpp src/unexplored_nav.cpp)
+add_executable(${PROJECT_NAME}_node src/main.cpp src/FSM.cpp src/cmdvel.cpp src/odom.cpp src/test.cpp src/maps.cpp src/mb_interface.cpp src/unexplored_nav.cpp src/emergency.cpp src/fire.cpp)
 
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} ${OpenCV_LIBRARIES}) 
