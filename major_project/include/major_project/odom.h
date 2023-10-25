@@ -4,6 +4,7 @@
 #include "ros/ros.h"
 #include <memory.h>
 #include <nav_msgs/Odometry.h> 
+#include <utility>
 
 /**
  * Subscribes to the odom topic
@@ -16,6 +17,8 @@ class COdom
     ~COdom();
     /// Returns the yaw of the turtlebot
     double getYaw();
+    /// Returns position of the turtlebot
+    std::pair<double, double> getPos();
   private:
     /// Subscriber node handler
     ros::Subscriber odom_sub_;
@@ -25,6 +28,10 @@ class COdom
     void callBack(const nav_msgs::Odometry::ConstPtr &msg);
     /// Yaw of the turtlebot
     double mYaw = 0.0;
+    ///
+    double mX = 0.0;
+    ///
+    double mY = 0.0;
 };
 
 #endif

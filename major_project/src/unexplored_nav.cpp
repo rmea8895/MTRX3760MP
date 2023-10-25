@@ -21,17 +21,27 @@
 
 // THIS NEEDS REFACTORING TO MANAGE ROW, COL, visited
 
+CUnexploredNav::CUnexploredNav(ros::NodeHandlePtr nh_)
+    : mapInterface(nh_)
+    , mbInterface(nh_)
+    , odomInterface(nh_)
+{
+    ROS_INFO("Unexplored nav INIT");
+}
+
+CUnexploredNav::~CUnexploredNav()
+{}
 
 // Need a function to check if a cell has been visited already
-bool CUnexploredNav::isValid(int xGrid, int yGrid) {
+bool CUnexploredNav::isValid(int xGrid, int yGrid, bool* visitedPtr) {
     bool check;
 
     // If cell lies out of bounds
-    if (xGrid < 0 || yGrid < 0 || xGrid >= ROW || yGrid >= COL) {
+    if (xGrid < 0 || yGrid < 0 || xGrid >= mROW || yGrid >= mCOL) {
         check = false;
     }
     // If cell is already visited
-    else if (visited[xGrid][yGrid]) {
+    else if (visitedPtr[xGrid][yGrid]) {
         check = false;
     }
     // Otherwise true
@@ -44,7 +54,7 @@ bool CUnexploredNav::isValid(int xGrid, int yGrid) {
 }
 
 // Need a function to perform the BFS algorithm
-bool CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int xGrid, int yGrid)
+bool CUnexploredNav::BFS(_2DArray* gridPtr, _2DArray* costmapPtr, std::pair<double, double> currentPosCart)
 {
     /*
      * Inputs:
@@ -62,6 +72,14 @@ bool CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int xGrid, int yGrid)
     int ROW = grid.size();
     int COL = grid[0].size();
 
+    mROW = ROW;
+    mCOL = COL;
+
+    std::pair<int , int> currentPosGrid = cartesian2Grid(currentPosCart);
+    int xGrid = currentPosGrid.first;
+    int yGrid = currentPosGrid.second;
+
+    bool visited[ROW][COL];   // Array for recording visited pixels -- WILL need to change how ROW and COL are accessed
     // Determine whether there are no more regions to explore
     bool noUnexploredBoundaries = false;
 
@@ -91,7 +109,7 @@ bool CUnexploredNav::BFS(auto gridPtr, auto costmapPtr, int xGrid, int yGrid)
             int adjy = y + dCol[i];
 
             // If the adjacent pixel is not visited before
-            if (isValid(adjx, adjy)) {
+            if (isValid(adjx, adjy, *visited)) {
                 q.push({ adjx, adjy });
                 visited[adjx][adjy] = true;
 
@@ -128,7 +146,7 @@ double CUnexploredNav::calculateDistance(int x, int y, int xGrid, int yGrid) {
 
 // Need a function to find closest unexplored point
 // (minimum of euclidian distance)
-std::pair<int, int> CUnexploredNav::closestPoint() {
+std::pair<int, int> CUnexploredNav::closestPoint(int xGrid, int yGrid) {
     // Get a really high value to begin with
     double minDistance = std::numeric_limits<double>::max();
     std::pair<int, int> minCoords;
@@ -151,8 +169,8 @@ std::pair<double, double> CUnexploredNav::grid2Cartesian(std::pair<int, int> gri
     int xGrid = gridCoords.first;
     int yGrid = gridCoords.second;
 
-    double xCart = (xGrid - ROW/2) * resolution;
-    double yCart = (COL/2 - yGrid) * resolution;
+    double xCart = (xGrid - mROW/2) * resolution;
+    double yCart = (mCOL/2 - yGrid) * resolution;
 
     return std::pair<double, double>(xCart, yCart);
 }
@@ -161,23 +179,30 @@ std::pair<int, int> CUnexploredNav::cartesian2Grid(std::pair<double, double> car
     double xCart = cartCoords.first;
     double yCart = cartCoords.second;
 
-    int xGrid = (xCart/resolution) + ROW/2;
-    int yGrid = COL/2 - (yCart/resolution);
+    int xGrid = (xCart/resolution) + mROW/2;
+    int yGrid = mCOL/2 - (yCart/resolution);
 
     return std::pair<int, int>(xGrid, yGrid);
 }
 
 
 // Handler to run the functions (like a main)
-std::pair<int, int> CUnexploredNav::handler(int xGrid, int yGrid) {
+bool CUnexploredNav::handler() {
+    bool ret = false;
     // row and col are the x and y position of the robot in the grid
+    std::pair<double, double> currentPosCart = odomInterface.getPos();
 
     // Run BFS to obtain unexplored boundary points
-    BFS(maps.getMapPtr(), maps.getCostMapPtr(), xGrid, yGrid);
-
+    ret = BFS(mapInterface.getMapPtr(), mapInterface.getCostMapPtr(), currentPosCart);
+    //
+    std::pair<int , int> currentPosGrid = cartesian2Grid(currentPosCart);
+    int xGrid = currentPosGrid.first;
+    int yGrid = currentPosGrid.second;
     // Run calculateDistance to find the closest of those boundary points
     std::pair<int, int> minCoords;
-    minCoords = grid2Cartesian(closestPoint());
+    minCoords = grid2Cartesian(closestPoint(xGrid, yGrid));
     
-    return minCoords;
+    std::cout << "Closest coordinates:" << minCoords.first << ", "  << minCoords.second<< std::endl;
+    //mbInterface.sendGoal();
+    return ret;
 }

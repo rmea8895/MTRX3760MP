@@ -21,20 +21,26 @@ bool CFSM::nextStateLogic()
     {
       // Fill in
       // EXAMPLE!!!
+
+      // nextState = States::INIT;
+      
+      // counter++;
+      // if (counter == 100)
+      // {
+      //   mbI.sendGoal();
+      //   nextState = States::INIT;
+      // }
+
+      // if (counter > 300)
+      // {
+      //   mbI.cancelGoal();
+      //   nextState = States::STATE1;
+      // }
+
+
+      tester.test1();
       nextState = States::INIT;
       
-      counter++;
-      if (counter == 100)
-      {
-        mbI.sendGoal();
-        nextState = States::INIT;
-      }
-
-      if (counter > 300)
-      {
-        mbI.cancelGoal();
-        nextState = States::STATE1;
-      }
       // counter++;
       // if (counter > 100)
       // {

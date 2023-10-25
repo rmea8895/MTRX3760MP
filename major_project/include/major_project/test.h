@@ -2,9 +2,11 @@
 #define TEST_H
 
 #include "cmdvel.h"
+#include "maps.h"
 #include "ros/ros.h"
 #include <memory.h>
 #include "odom.h"
+#include <vector>
 #include <iostream>
 
 /*
@@ -17,12 +19,13 @@ class CTEST
     ~CTEST();
 
     // Tests odom subscribing
-    void test1(double Yaw);
+    void test1();
     // Tests cmd velocity publishing
     void test2();
   private:
-    // Example
+    // Example Interfaces
     CCmdVel cmdvelInterface;
+    CMaps mapInterface;
 
 
 };

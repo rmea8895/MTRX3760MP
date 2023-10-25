@@ -8,6 +8,11 @@ COdom::COdom(ros::NodeHandlePtr nh_)
   ROS_ASSERT(ret);
 }
 
+std::pair<double, double> COdom::getPos()
+{
+  return std::pair<double, double>(mX, mY);
+}
+
 bool COdom::init(ros::NodeHandlePtr nh_)
 {
   odom_sub_ = nh_->subscribe("odom", 10, &COdom::callBack, this);
@@ -26,6 +31,9 @@ void COdom::callBack(const nav_msgs::Odometry::ConstPtr &msg)
     yaw += 2*M_PI;
 
   mYaw = yaw;
+
+  mX = msg->pose.pose.position.x;
+  mY = msg->pose.pose.position.y;
 }
 
 double COdom::getYaw()
