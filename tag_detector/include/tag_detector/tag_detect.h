@@ -1,10 +1,9 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef TAGDETECT_H
+#define TAGDETECT_H
 
 #define QUEUE_SIZE 1
-#define IMAGE_TOPIC "/camera/rgb/image_raw"
-#define THRESH_RED_IMAGE 0.7
-#define THRESH_RED_PIXEL 0.7
+#define FIRETAGCODE 232
+#define PERSONTAGCODE 123
 
 // Are all these includes nessisary?
 #include "ros/ros.h"
@@ -17,10 +16,24 @@ class CTagDetect
 {
     private:
     ros::NodeHandle nh_;
-    ros::Publisher pub_tagDetect_;
+    ros::Publisher pub_fireDetect_;
+    ros::Publisher pub_personDetect_;
+    ros::Sybscriber sub_aprilTag_;
 
     void TagCheck(const apriltag_ros::AprilTagDetection& TagsDetected);
     void TagVerify(int id, int pos[2]);
+
+    //msgs to detect if red or not
+    message_generation::detect det_fire;
+    message_generation::detect det_person;
+
+    //variables
+    int id;
+    int pos[2];
+
+    //Camera Statics
+    int cam_width = 640;
+    int cam_height = 480;
 
     public:
     //initalise members
@@ -34,4 +47,4 @@ class CTagDetect
 
 };
 
-#endif // WALLFOLLWER_H 
+#endif // TAGDETECT_H 
