@@ -116,7 +116,7 @@ bool CUnexploredNav::BFS(_2DArray* gridPtr, _2DArray* costmapPtr, std::pair<doub
                 // Logic for if pixels are on the boundary of unexplored regions
                 // If adjacent pixel is unexplored and is far away enough from
                 // any nearby walls, then add pixel to vector of pairs
-                if (grid[adjx][adjy] == PLACEHOLDER && costmap[adjx][adjy] < PLACEHOLDER && isBoundary == false) {
+                if (grid[adjx][adjy] == -1 && costmap[adjx][adjy] < 50 && isBoundary == false) {
                     // Add pixel by pushing back onto the vector
                     boundaryPixels.push_back(std::make_pair(x, y));
                     // boundaryPixels[std::make_pair(x, y)] = calculateMagnitude(x, y, row, col);
