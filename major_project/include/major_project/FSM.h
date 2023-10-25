@@ -6,7 +6,7 @@
 #include "odom.h"
 #include "test.h"
 #include "states.h"
-#include "move_base_client.h"
+#include "mb_interface.h"
 #include <memory.h>
 
 // ----- macros ----- 
@@ -15,7 +15,7 @@
 // ----- foward declarations ----- 
 class COdom;
 class CTEST;
-class Cmove_baseCI;
+class Cmb_interface;
 //class CSLAM;      // ONLY FOR EXAMPLE AT THE MOMENT
 
 /**
@@ -39,8 +39,8 @@ class CFSM
     // ---- subscriber topic interfaces ----
     COdom odomInterface{nh_};
 
-    // ---- move_base_client ----
-    Cmove_baseCI move_baseCI{nh_};
+    // ---- move_base interface ----
+    Cmb_interface mbI{nh_};
 
   private:
     // ---- state history ----
