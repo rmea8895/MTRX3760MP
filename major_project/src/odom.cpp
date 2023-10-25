@@ -41,6 +41,15 @@ double COdom::getYaw()
   return mYaw;
 }
 
+// double Codom::getYaw360() {
+
+//     if (mYaw < 0) {
+//         return 2*M_PI + mYaw;
+//     } else {
+//         return mYaw;
+//     }
+// }
+
 COdom::~COdom()
 { 
 }

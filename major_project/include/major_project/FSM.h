@@ -7,7 +7,9 @@
 #include "test.h"
 #include "states.h"
 #include "mb_interface.h"
+#include "unexplored_nav.h"
 #include <memory.h>
+#include <iostream>
 
 // ----- macros ----- 
 #define DEBUG
@@ -41,6 +43,10 @@ class CFSM
 
     // ---- move_base interface ----
     Cmb_interface mbI{nh_};
+
+    // Unexplored nav
+    CUnexploredNav uNavI{nh_};
+
 
   private:
     // ---- state history ----

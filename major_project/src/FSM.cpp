@@ -37,8 +37,9 @@ bool CFSM::nextStateLogic()
       //   nextState = States::STATE1;
       // }
       nextState = States::INIT;
-      int counter = 0;
+      static int counter = 0;
       counter ++;
+      //std::cout << counter << std::endl;
       if (counter > 100)
       {
         tester.test1();
@@ -58,12 +59,11 @@ bool CFSM::nextStateLogic()
       // tester.test1(odomInterface.getYaw());
       break;
     }
-    case States::STATE1:
+    case States::UNAV:
     {
-      // tester.test2();
-      // Fill in
+      nextState = uNavI.handler() ? States::UNAV : States::END;
+
       ROS_INFO("State [%d]", int(currentState));
-      nextState = States::STATE1;
       break;
     }
     case States::END:

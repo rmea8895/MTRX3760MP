@@ -41,8 +41,9 @@ class CUnexploredNav
     typedef std::vector<std::vector<signed char>> _2DArray;
     
     // -- Function declarations ------------------------------------------------
-    bool isValid(int xGrid, int yGrid, bool* visitedPtr);
-    bool BFS(_2DArray* gridPtr, _2DArray* costmapPtr, std::pair<double, double> currentPosCart);  // Will need to change function input data types
+    bool isValid(int xGrid, int yGrid);
+    //bool BFS(_2DArray* gridPtr, _2DArray* costmapPtr, std::pair<double, double> currentPosCart);  // Will need to change function input data types
+    bool searchBoundaries(_2DArray* gridPtr, _2DArray* costmapPtr);
     double calculateDistance(int x, int y, int row, int col);
     std::pair<int, int> closestPoint(int xGrid,int yGrid);
     std::pair<double, double> grid2Cartesian(std::pair<int, int> gridCoords);
@@ -50,13 +51,17 @@ class CUnexploredNav
     // -- Data declarations ----------------------------------------------------
     int mROW = 0;
     int mCOL = 0;
+    //
+    //_2DArray visited;
+    //
 
-    const double resolution = 0.025; // Resolution for distance per grid element
+    double resolution = 0.025; // Resolution for distance per grid element
     const int dRow[4] = { -1, 0, 1, 0 };
     const int dCol[4] = { 0, 1, 0, -1 };
 
     // Vector of pairs for storing the boundary pixels
     std::vector<std::pair<int, int>> boundaryPixels;
+
 };
 
 #endif // UNEXPLORED_NAV

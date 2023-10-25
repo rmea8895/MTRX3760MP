@@ -17,22 +17,30 @@ bool CMaps::init(ros::NodeHandlePtr nh_)
 
 void CMaps::mapCallBack(const nav_msgs::OccupancyGrid::ConstPtr& msg)
 {
-  std::cout << "Map Callback" << std::endl;
+  //std::cout << "Map Callback" << std::endl;
   // cell size is default 0.05m/cell or 5cm per cell resolution
   // probably want 2cm per cell res, can modify this in the yaml config
   unsigned int width = msg->info.width;
   unsigned int height = msg->info.height;
 
-  std::cout << msg->data[0] << std::endl;
-  // for(int i = 0; i < width; i++)
-  // {
-  //   for(int j = 0; j < height; j++)
-  //   {
-  //     std::cout << i << ", " << j << std::endl;
-  //     map[i][j] = msg->data[i+j*width];
-  //   }
-  // }
-  std::cout << "Map Callback end" << std::endl;
+  // Resize map to width*height with zeros
+  map.resize(width);
+  for(int i = 0; i < width; i++)
+  {
+    map[i].resize(height);
+  }
+  //std::cout << width << ", " << height << std::endl;
+  // std::cout << width << ", " << height << std::endl;
+  // std::cout << static_cast<int>(msg->data[0]) << std::endl;
+  for(int i = 0; i < width; i++)
+  {
+    for(int j = 0; j < height; j++)
+    {
+      // std::cout << i << ", " << j << std::endl;
+      map[i][j] = msg->data[i+j*width];
+    }
+  }
+  //std::cout << "Map Callback end" << std::endl;
   #ifdef MAP_DEBUG
     ROS_INFO("State [%d]", msg);
   #endif
@@ -40,9 +48,16 @@ void CMaps::mapCallBack(const nav_msgs::OccupancyGrid::ConstPtr& msg)
 
 void CMaps::costMapCallBack(const nav_msgs::OccupancyGrid::ConstPtr& msg)
 {
+  //std::cout << "Cost Map Callback" << std::endl;
+
   unsigned int width = msg->info.width;
   unsigned int height = msg->info.height;
-
+  // Resize map to width*height with zeros
+  costMap.resize(width);
+  for(int i = 0; i < width; i++)
+  {
+    costMap[i].resize(height);
+  }
   for(int i = 0; i < width; i++)
   {
     for(int j = 0; j < height; j++)
@@ -50,6 +65,7 @@ void CMaps::costMapCallBack(const nav_msgs::OccupancyGrid::ConstPtr& msg)
       costMap[i][j] = msg->data[i+j*width];
     }
   }
+  //std::cout << "Cost Map END" << std::endl;
 }
 
 std::vector<std::vector<signed char>>* CMaps::getMapPtr()

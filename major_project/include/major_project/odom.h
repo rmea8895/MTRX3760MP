@@ -17,6 +17,8 @@ class COdom
     ~COdom();
     /// Returns the yaw of the turtlebot
     double getYaw();
+    // /// Returns the yaw of the turtlebot 0-360 deg
+    // double getYaw360();
     /// Returns position of the turtlebot
     std::pair<double, double> getPos();
   private:

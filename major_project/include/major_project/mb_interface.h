@@ -4,6 +4,7 @@
 #include <ros/ros.h>
 #include "states.h"
 #include <iostream>
+#include <utility>
 #include <actionlib_msgs/GoalID.h> // for canceling the goal
 #include <geometry_msgs/PoseStamped.h>
 
@@ -17,7 +18,7 @@ class Cmb_interface
     ~Cmb_interface(); 
 
     
-    void sendGoal();
+    void sendGoal(std::pair<double, double> coords);
 
     void cancelGoal();
   private:

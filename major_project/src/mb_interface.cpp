@@ -24,18 +24,20 @@ bool Cmb_interface::init(ros::NodeHandlePtr nh_)
 void Cmb_interface::cancelGoal()
 {
   actionlib_msgs::GoalID test;
-
+  std::cout << "Canceling goal" << std::endl;
   test.id = "";
   actionlib_cancel_pub.publish(test);
 }
 
-void Cmb_interface::sendGoal()
+void Cmb_interface::sendGoal(std::pair<double, double> coords)
 {
   geometry_msgs::PoseStamped test;
 
   test.header.frame_id = "map";
-  test.pose.position.x = 0.0;
-  test.pose.position.y = 0.0;
+  // test.pose.position.x = 0;
+  // test.pose.position.x = 0;
+  test.pose.position.x = coords.first;
+  test.pose.position.y = coords.second;
   test.pose.orientation.w = 0.7514451452616765;
   test.pose.orientation.z = 0.659795569599143;
   move_base_goal_pub.publish(test);

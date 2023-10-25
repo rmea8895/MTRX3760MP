@@ -5,7 +5,9 @@
 enum class States
 {
   INIT,
-  STATE1,
+  UNAV,
+  FIRE,
+  RESCUE,
   END,
   ERROR
 };
