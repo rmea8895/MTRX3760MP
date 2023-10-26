@@ -47,6 +47,9 @@ class CFSM
     // Unexplored nav
     CUnexploredNav uNavI{nh_};
 
+    // Fire state
+    CFire fireInterface{nh_};
+
 
   private:
     // ---- state history ----

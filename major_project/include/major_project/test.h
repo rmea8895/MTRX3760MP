@@ -5,6 +5,7 @@
 #include "maps.h"
 #include "mb_interface.h"
 #include "unexplored_nav.h"
+#include "fire.h"
 #include "ros/ros.h"
 #include <memory.h>
 #include "odom.h"
@@ -29,6 +30,7 @@ class CTEST
     CCmdVel cmdvelInterface;
     CMaps mapInterface;
     CUnexploredNav unexploredNav;
+    CFire fireInterface;
 
 
 

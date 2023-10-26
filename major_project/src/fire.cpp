@@ -8,3 +8,7 @@ bool CFire::handler()
 
 CFire::CFire(ros::NodeHandlePtr nh_): Cemergency(nh_)
 {}
+
+CFire::~CFire()
+{
+}
