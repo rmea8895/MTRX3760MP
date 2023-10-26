@@ -43,5 +43,4 @@ void CCamera::imageCallback(const sensor_msgs::ImageConstPtr& original_image)
     //Add some delay in miliseconds. The function only works if there is at least one HighGUI window created and the window is active. If there are several HighGUI windows, any of them can be active.
     cv::waitKey(3);
 
-
 }
