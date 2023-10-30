@@ -4,6 +4,7 @@
 static const char WINDOW[] = "Image Processed";
 
 CTagDetect::CTagDetect()
+:nh_("~")
 {
     // Init turtlebot3 node
     ROS_INFO("TAG DETECT INIT");
@@ -18,7 +19,8 @@ CTagDetect::CTagDetect()
     //Publishers to main
     pub_fireDetect_ = nh_.advertise<std_msgs::Bool>("Fire_det", 1000);
     pub_personDetect_ = nh_.advertise<std_msgs::Bool>("Person_det", 1000);
-
+    
+    ROS_INFO("TAG DETECT INIT FIN");
 }
 
 CTagDetect::~CTagDetect()
@@ -83,11 +85,11 @@ int main(int argc, char* argv[])
     ros::init(argc, argv, "TagDetector");
 
     //Begin Camera Object
-    CTagDetect tagDetect();
+    CTagDetect tagDetect;
 
     //Cameria Port
-    //static const char image_topic[] = IMAGE_TOPIC;
-    //CCamera camera(image_topic);
+    static const char image_topic[] = IMAGE_TOPIC;
+    CCamera camera(image_topic);
 
     ROS_INFO("Main Started");
 
