@@ -16,8 +16,8 @@ CTagDetect::CTagDetect()
     sub_aprilTag_ = nh_.subscribe( "/tag_detections", QUEUE_SIZE, &CTagDetect::TagCheck, this);
 
     //Publishers to main
-    //pub_fireDetect_ = nh_.advertise<message_generation::detect>("Fire_det", 1000);
-    //pub_personDetect_ = nh_.advertise<message_generation::detect>("Person_det", 1000);
+    pub_fireDetect_ = nh_.advertise<std_msgs::Bool>("Fire_det", 1000);
+    pub_personDetect_ = nh_.advertise<std_msgs::Bool>("Person_det", 1000);
 
 }
 
@@ -35,47 +35,46 @@ bool CTagDetect::init()
     return true;
 }
 
-void TagCheck(const apriltag_ros::AprilTagDetectionPtr& TagsDetected)
+void CTagDetect::TagCheck(const apriltag_ros::AprilTagDetectionPtr& TagsDetected)
 {
-    // if(TagsDetected.id == 0)
-    // {
-    //     ROS_INFO("NO TAG DETECTED");
-    // }
-    // else
-    // {
-    //     //Number of tags detected
-    //     int no_tags = sizeof(TagsDetected.id)/sizeof(TagsDetected.id[0]);
-        
-    //     for(int i = 0; i < no_tags; i++)
-    //     {
-    //         //TagVerify(TagsDetected.id[i], TagsDetected.size[i] );
-    //     }
-    // }
+    if(TagsDetected->id[0] == 0)
+    {
+        ROS_INFO("NO TAG DETECTED");
+    }
+    else
+    {
+        //Number of tags detected
+        int no_tags = sizeof(TagsDetected->id)/sizeof(TagsDetected->id[0]);
+        for(int i = 0; i < no_tags; i++)
+        {
+            TagVerify(TagsDetected->id[i], TagsDetected->size[i] );
+        }
+    }
     
 }
 
-// void TagVerify(int id, float size_tag)
-// {
-//     //FIRE TAG CHECKER
-//     if(id == FIRETAGCODE){
-//         det_fire.detected = true;
-//         det_fire.size = size_tag;
-//     }else{
-//         det_fire.detected = false;
-//         det_fire.size = 0;
-//     }
-//     //PERSON TAG CHECKER
-//     if(id == PERSONTAGCODE){
-//         det_person.detected = true;
-//         det_person.size = size_tag;
-//     }else{
-//         det_person.detected = false;
-//         det_person.size = 0;
-//     }
+void CTagDetect::TagVerify(int id, float size_tag)
+{
+    // //FIRE TAG CHECKER
+    if(id == FIRETAGCODE){
+        det_fire.data = true;
+    //     det_fire.size = size_tag;
+    }else{
+        det_fire.data = false;
+    //     det_fire.size = 0;
+    }
+    // //PERSON TAG CHECKER
+    if(id == PERSONTAGCODE){
+        det_person.data = true;
+    //     det_person.size = size_tag;
+    }else{
+        det_person.data = false;
+    //     det_person.size = 0;
+    }
 
-    //pub_fireDetect_.publish(det_fire);
-    //pub_personDetect_.publish(det_person);
-//};
+    pub_fireDetect_.publish(det_fire);
+    pub_personDetect_.publish(det_person);
+};
 
 
 // ------------------------ Main -----------------------------------------------

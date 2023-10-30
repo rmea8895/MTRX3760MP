@@ -21,7 +21,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 //Include headers for OpenCV GUI handling
 #include <opencv2/highgui/highgui.hpp>
-#include <std_msgs/Bool.h>
+
+#include <sensor_msgs/Image.h>
 
 
 class CCamera

@@ -1,4 +1,4 @@
-#include "../include/cameraTester/camera.h"
+#include "../include/tag_detector/cameraport.h"
 
 static const char WINDOW[] = "Image Processed";
 
@@ -10,10 +10,7 @@ CCamera::CCamera(std::string image_topic)
 
   //Subscribe to cammer image
   sub_img_ = it_.subscribe( image_topic, QUEUE_SIZE, &CCamera::imageCallback, this);
-  
-  //Publish the red detection booleen if true or false
-  pub_img_ = nh_.advertise<std_msgs::Bool>("Red_bool", 1000);
-  
+
 }
 
 CCamera::~CCamera()
