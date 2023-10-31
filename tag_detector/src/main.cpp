@@ -57,6 +57,8 @@ void CTagDetect::TagCheck(const apriltag_ros::AprilTagDetectionPtr& TagsDetected
 
 void CTagDetect::TagVerify(int id, float size_tag)
 {
+    ROS_INFO("TAG DETECTED");
+    
     // //FIRE TAG CHECKER
     if(id == FIRETAGCODE){
         det_fire.data = true;
