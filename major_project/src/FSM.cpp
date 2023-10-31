@@ -33,14 +33,18 @@ bool CFSM::nextStateLogic()
     }
     case States::UNAV:
     {
-      nextState = uNavI.handler() ? States::UNAV : States::END;
-
+      static bool toggle = true;
+      if (toggle)
+      {
+        nextState = uNavI.handler() ? States::UNAV : States::END;
+        toggle = false;
+      }
       static int counter = 0;
       counter++;
-      if(counter == 500)
-      {
-        nextState = States::FIRE;
-      }
+      // if(counter == 500)
+      // {
+      //   nextState = States::FIRE;
+      // }
       ROS_INFO("State [%d]", int(currentState));
       break;
     }
