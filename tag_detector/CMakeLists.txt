@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   std_msgs
-  message_generation
   cv_bridge
   image_transport
   tf
@@ -103,7 +102,7 @@ add_message_files(
 ###################################
 catkin_package(
    INCLUDE_DIRS include
-   CATKIN_DEPENDS apriltag_ros roscpp rospy sensor_msgs std_msgs message_generation cv_bridge image_transport tf
+   CATKIN_DEPENDS apriltag_ros roscpp rospy sensor_msgs std_msgs cv_bridge image_transport tf
 )
 
 ###########
