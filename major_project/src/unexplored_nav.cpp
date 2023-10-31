@@ -80,7 +80,7 @@ bool CUnexploredNav::searchBoundaries(_2DArray* gridPtr, _2DArray* costmapPtr)
         {
             if(
                 grid[i][j] == 0
-                && costmap[i][j] < 90
+                && costmap[i][j] < 50
             )
             {
                 for(int k = 0; k < 4; k++)
