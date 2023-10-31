@@ -11,7 +11,8 @@
 #include <string>     
 #include <array>  
 #include "apriltag_ros/AprilTagDetection.h" 
-#include <std_msgs/Bool.h>                     // for mScanAngles
+#include <std_msgs/Bool.h>     
+//#include "tag_detector/detect.h"              // for mScanAngles
 
 //#include "tag_detector/detect.h"
 
@@ -24,10 +25,10 @@ class CTagDetect
     ros::Subscriber sub_aprilTag_;
 
     void TagCheck(const apriltag_ros::AprilTagDetectionPtr& TagsDetected);
-    void TagVerify(int id, int pos[2]);
+    void TagVerify(int id, float size_tag );
 
-    //tag_detector::detect det_fire;
-    //tag_detector::detect det_person;
+    // tag_detector::detect det_fire;
+    // tag_detector::detect det_person;
     std_msgs::Bool det_fire;
     std_msgs::Bool det_person;
 
