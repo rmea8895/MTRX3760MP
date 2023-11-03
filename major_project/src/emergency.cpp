@@ -45,17 +45,6 @@ std::pair<double, double> Cemergency::findEmergency()
   int runCount = 0;
   int i = currentPosGrid.first, j = 800 - currentPosGrid.second;
 
-  // std::pair<int, int> wall;
-  // for(int k = 0; k < COL; k++)
-  // {
-  //   for(int l = 0; l < ROW; l++)
-  //   {
-  //     if(costMapPtr[k][l] > 99)
-  //       std::cout << " Coord:" << k << ", " << l << "Val " <<  static_cast<int>(costMapPtr[k][l]) ;
-  //   }
-  // }
-  //std::cout << std::endl;
-
   while(isValid(i,j) && !wallFound)
   {
     for(int k = 0; k < abs(rise); k++)
@@ -108,13 +97,6 @@ bool Cemergency::isValid(int xGrid, int yGrid) {
     else {
         check = true;
     }
-    // // If cell is already visited
-    // else if (visited[xGrid][yGrid]) {
-    //     std::cout << "Visited" << std::endl;
-    //     check = false;
-    // }
-    // Otherwise true
-    
  
     // Otherwise
     return check;
