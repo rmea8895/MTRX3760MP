@@ -3,6 +3,10 @@
 
 #include "emergency.h"
 
+/**
+ * Derived class of the emergency class.
+ * Is called apon sucesfull identification of fire april-tag
+ */
 class CFire: public Cemergency
 {
   public:

@@ -1,7 +1,7 @@
 #ifndef STATES_H
 #define STATES_H
 
-
+/// @brief FSM States
 enum class States
 {
   INIT,

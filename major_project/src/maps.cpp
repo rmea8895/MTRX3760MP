@@ -18,7 +18,6 @@ bool CMaps::init(ros::NodeHandlePtr nh_)
 void CMaps::mapCallBack(const nav_msgs::OccupancyGrid::ConstPtr& msg)
 {
   // cell size is default 0.05m/cell or 5cm per cell resolution
-  // probably want 2cm per cell res, can modify this in the yaml config
   unsigned int width = msg->info.width;
   unsigned int height = msg->info.height;
 
@@ -33,7 +32,6 @@ void CMaps::mapCallBack(const nav_msgs::OccupancyGrid::ConstPtr& msg)
   {
     for(int j = 0; j < height; j++)
     {
-      // std::cout << i << ", " << j << std::endl;
       map[i][j] = msg->data[i+j*width];
     }
   }

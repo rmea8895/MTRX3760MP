@@ -1,24 +1,9 @@
 #include "../include/major_project/unexplored_nav.h"
-
 #include <limits>
 #include <utility>
 #include <queue>
 #include <iostream>
 #include <cmath>
-
-
-/*
-1. Use the regular occupancy grid (/map) to find pixels that are on the boundary
-	of unexplored. These
-
-2. Use /move_base global cost map to remove any points that are red (close to a
-	nearby wall)
-*/
-
-// Define constants
-
-
-// THIS NEEDS REFACTORING TO MANAGE ROW, COL, visited
 
 CUnexploredNav::CUnexploredNav(ros::NodeHandlePtr nh_)
     : mapInterface(nh_)
@@ -37,27 +22,20 @@ bool CUnexploredNav::isValid(int xGrid, int yGrid) {
 
     // If cell lies out of bounds
     if (xGrid < 0 || yGrid < 0 || xGrid >= mROW || yGrid >= mCOL) {
-        std::cout << "Out of bounds" << std::endl;
         check = false;
     }
     else {
         check = true;
     }
-    // // If cell is already visited
-    // else if (visited[xGrid][yGrid]) {
-    //     std::cout << "Visited" << std::endl;
-    //     check = false;
-    // }
-    // Otherwise true
-    
  
     // Otherwise
     return check;
 }
-bool CUnexploredNav::searchBoundaries(_2DArray* gridPtr, _2DArray* costmapPtr)
+
+bool CUnexploredNav::searchBoundaries(_2DVector* gridPtr, _2DVector* costmapPtr)
 {
-    _2DArray grid = *gridPtr;
-    _2DArray costmap = *costmapPtr;
+    _2DVector grid = *gridPtr;
+    _2DVector costmap = *costmapPtr;
 
     // For now, assume grid and costmap have same size
     int ROW = grid.size();
@@ -66,21 +44,17 @@ bool CUnexploredNav::searchBoundaries(_2DArray* gridPtr, _2DArray* costmapPtr)
     mROW = ROW;
     mCOL = COL;
 
-    // std::pair<int , int> currentPosGrid = cartesian2Grid(currentPosCart);
-    // int xGrid = currentPosGrid.first;
-    // int yGrid = currentPosGrid.second;
+    // boundary pixels vector
     std::vector<std::pair<int, int>> local_boundaryPixels;
 
-    std::cout << ROW << std::endl;
-    std::cout << COL << std::endl;
-    // loop over map
+    // loop over entire map and find boundary points
     for (int i = 0; i < ROW; i++)
     {
         for (int j = 0; j < COL; j++)
         {
             if(
-                grid[i][j] == 0
-                && costmap[i][j] < 50
+                grid[i][j] == _unexplored_cell
+                && costmap[i][j] < _max_wall_threshold
             )
             {
                 for(int k = 0; k < 4; k++)
@@ -91,15 +65,12 @@ bool CUnexploredNav::searchBoundaries(_2DArray* gridPtr, _2DArray* costmapPtr)
                     {
                         if(grid[adjx][adjy] == -1)
                         {
-                            //std::cout << "Boundary found " << i << "," << j << std::endl;
-
+                            // Boundary point is found
                             local_boundaryPixels.push_back(std::make_pair(i,j));
                         }
                     }
                 }
             }
-            
-            
         }
     }
     boundaryPixels = local_boundaryPixels;
@@ -115,8 +86,7 @@ double CUnexploredNav::calculateDistance(int x, int y, int xGrid, int yGrid) {
     return std::sqrt(static_cast<double>(dx * dx) + static_cast<double>(dy * dy));
 }
 
-// Need a function to find closest unexplored point
-// (minimum of euclidian distance)
+
 std::pair<int, int> CUnexploredNav::closestPoint(int xGrid, int yGrid) {
     // Get a really high value to begin with
     double minDistance = std::numeric_limits<double>::max();
@@ -131,7 +101,6 @@ std::pair<int, int> CUnexploredNav::closestPoint(int xGrid, int yGrid) {
             minCoords = boundaryPixels.at(i);
         }
     }
-
     return minCoords;
 }
 
@@ -156,25 +125,24 @@ std::pair<int, int> CUnexploredNav::cartesian2Grid(std::pair<double, double> car
 }
 
 
-// Handler to run the functions (like a main)
 bool CUnexploredNav::handler() {
-
     bool ret = false;
   
     // row and col are the x and y position of the robot in the grid
     std::pair<double, double> currentPosCart = odomInterface.getPos();
-    // std::cout << "Current position" << currentPosCart.first << ", "<< currentPosCart.second << std::endl;
 
     // Run array search to obtain unexplored boundary points
     ret = searchBoundaries(mapInterface.getMapPtr(), mapInterface.getCostMapPtr());
-    //
+
+    // Convert current position from odom data to grid coordinates
     std::pair<int , int> currentPosGrid = cartesian2Grid(currentPosCart);
     int xGrid = currentPosGrid.first;
     int yGrid = currentPosGrid.second;
+
     // Run calculateDistance to find the closest of those boundary points
     std::pair<double, double> minCoords = grid2Cartesian(closestPoint(xGrid, yGrid));
         
-    // If sucessfull send the goal to 
+    // If sucessfull send the goal to the move base interface
     if(ret)
         mbInterface.sendGoal(minCoords);
     return ret;

@@ -31,9 +31,6 @@ class CTEST
     CMaps mapInterface;
     CUnexploredNav unexploredNav;
     CFire fireInterface;
-
-
-
 };
 
 #endif // TEST_H

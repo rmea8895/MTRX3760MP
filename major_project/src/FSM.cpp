@@ -14,40 +14,21 @@ bool CFSM::nextStateLogic()
   {
     case States::INIT:
     {
-      // put in function for FSM
-      nextState = States::INIT;
-      static int counter = 0;
-      counter ++;
-
-      if (counter == 100)
-      {
-        // tester.test1();
-        nextState = States::UNAV;
-      }
-      #ifndef DEBUG
-        ROS_INFO("State [%d]", int(currentState));
-      #endif
+      nextState = init_state() ? States::UNAV : States::INIT;
       break;
     }
     case States::UNAV:
     {
       nextState = uNavI.handler() ? States::UNAV : States::END;
-      #ifndef DEBUG
-        ROS_INFO("State [%d]", int(currentState));
-      #endif
       break;
     }
     case States::FIRE:
     {
       fireInterface.handler();
     }
-    case States::PERSON:
-    {
-      personInterface.handler();
-    }
     case States::END:
     {
-      ROS_INFO("State [%d]", int(currentState));
+      ROS_INFO("End State", int(currentState));
       break;
     }
     case States::ERROR:
@@ -67,6 +48,17 @@ bool CFSM::nextStateLogic()
   currentState = nextState;
 
   return true;
+}
+
+
+bool CFSM::init_state(){
+  static int counter = 0;
+  counter ++;
+
+  if (counter == 100)
+    return true
+  else
+    return false
 }
 
 CFSM::~CFSM()

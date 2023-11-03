@@ -12,5 +12,4 @@
 // ----- Foward Declarations ----- 
 class CFSM;
 
-
 #endif // MAIN_H

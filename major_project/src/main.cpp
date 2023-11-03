@@ -7,11 +7,7 @@ int main(int argc, char* argv[])
   
   CFSM FSM;
 
-  ROS_INFO("Init Finished");
-
   ros::Rate loop_rate(LOOP_RATE); // 30 Hz
-
-  // SHOULD CHECK SENSOR DATA IS NON-ZERO FIRST !
 
   ROS_INFO("Main Whileloop Start");
   

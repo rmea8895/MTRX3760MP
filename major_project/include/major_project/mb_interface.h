@@ -9,33 +9,32 @@
 #include <actionlib_msgs/GoalStatus.h> 
 #include <geometry_msgs/PoseStamped.h>
 
+
 /**
- * move_base client interface
-*/
+ * @brief ROS move_base node interface
+ * This class allows users to publish goals to the move_base interface
+ * and cancel the goals
+ */
 class Cmb_interface
 {
   public:
     Cmb_interface(ros::NodeHandlePtr nh_);
     ~Cmb_interface(); 
 
-    
+    // Sends the (x, y) goal coordinates to the 
     void sendGoal(std::pair<double, double> coords);
 
     void cancelGoal();
     
   private:
-
+    // move base goal publisher
     ros::Publisher move_base_goal_pub;
 
+    // actionlib cancel goal publisher
     ros::Publisher actionlib_cancel_pub;
-
-    ros::Subscriber actionlib_status;
-
-    void statusCB(const actionlib_msgs::GoalStatus::ConstPtr &msg);
-
-    int STATUS = 0;
+    
+    // initialises ROS subscribers and publishes
     bool init(ros::NodeHandlePtr nh_);
-
 };
 
 #endif // MB_INTERFACE

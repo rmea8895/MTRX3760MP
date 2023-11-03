@@ -15,10 +15,8 @@
 #define DEBUG
 
 // ----- foward declarations ----- 
-class COdom;
+class CUnexploredNav;
 class CTEST;
-class Cmb_interface;
-//class CSLAM;      // ONLY FOR EXAMPLE AT THE MOMENT
 
 /**
  * Finite State Machine, contains interfaces to standard topics
@@ -29,30 +27,28 @@ class CFSM
     CFSM();
     ~CFSM();
 
-    /// ROS node handle pointer
+    // ROS node handle pointer
     ros::NodeHandlePtr nh_ = ros::NodeHandlePtr(new ros::NodeHandle());
 
-    /// Next state logic function
+    // Next state logic function
     bool nextStateLogic();
 
-    // ---- your class here ----
+  private:
+    // ----- state interfaces -----
+    // Test interface for debugging
     CTEST tester{nh_};
-
-    // ---- subscriber topic interfaces ----
-    COdom odomInterface{nh_};
-
-    // ---- move_base interface ----
-    Cmb_interface mbI{nh_};
 
     // Unexplored nav
     CUnexploredNav uNavI{nh_};
 
     // Fire state
     CFire fireInterface{nh_};
+    
+    // ----- private variables -----
+    // inital state used to wait until callbacks return non-zero values
+    bool init_state();
 
-
-  private:
-    // ---- state history ----
+    // ----- state history -----
     States currentState = States::INIT;
     States prevState = States::INIT;
     States nextState;
